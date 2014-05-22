@@ -1,6 +1,8 @@
 require 'redis'
 require 'redis-namespace'
-require './lib/datasets'
+require './lib/cookbooks'
+
+GETCHEF_URL='http://community.opscode.com/cookbooks/'
 
 task :default => [:test]
 
@@ -33,7 +35,7 @@ namespace :perform do
 
   def redis_setup
     r = Redis.new(:url => ENV['REDISTOGO_URL'])
-    redis = Redis::Namespace.new(:jstalker, :redis => r) 
+    redis = Redis::Namespace.new(:getgetchef, :redis => r) 
     redis
   end
 
@@ -42,7 +44,7 @@ namespace :perform do
     require './env/local.rb'
     require './tasks/post_to_twitter_worker'
 
-    worker = JoyentStalker::Datasets.new(redis_setup)
+    worker = Getgetchef::Cookbooks.new(redis_setup)
     worker.update_staging_sets
 
     # prepare to test
@@ -51,16 +53,17 @@ namespace :perform do
     redis_setup.spop :current_sets
     redis_setup.spop :current_sets
 
-    # print old dataset
-    worker.find_gone_datasets.each do |dataset|
-      DummyWorker.perform_async("dataset disappeared. #{dataset}" ,["#test_tweet"])
-      PostWorker.perform_async("dataset disappeared. #{dataset}" ,["#test_tweet"])
+    # print old cookbook
+    worker.find_gone_cookbooks.each do |cookbook|
+      DummyWorker.perform_async("cookbook disappeared. #{cookbook}" ,["#test_tweet"])
+      # PostWorker.perform_async("cookbook disappeared. #{cookbook}" ,["#test_tweet"])
     end
 
-    # print new dataset
-    worker.find_new_datasets.each do |dataset|
-      DummyWorker.perform_async("New dataset appeared. #{dataset}" ,["#test_tweet"])
-      PostWorker.perform_async("New dataset appeared. #{dataset}" ,["#test_tweet"])
+    # print new cookbook
+    worker.find_new_cookbooks.each do |cookbook|
+      data = split_cookbook(cookbook)
+      DummyWorker.perform_async("Cookbook #{data[0]} version #{data[1]} has been uploaded. #{GETCHEF_URL}#{data[0]}" ,["#test_tweet"])
+      PostWorker.perform_async("Cookbook #{data[0]} version #{data[1]} has been uploaded. #{GETCHEF_URL}#{data[0]}" ,["#test_tweet"])
     end
 
     worker.save_current_sets
@@ -71,21 +74,24 @@ namespace :perform do
   task :heroku do
     require './tasks/post_to_twitter_worker'
 
-    worker = JoyentStalker::Datasets.new(redis_setup)
+    worker = Getgetchef::Cookbooks.new(redis_setup)
     worker.update_staging_sets
 
-    # print old dataset
-    worker.find_gone_datasets.each do |dataset|
-      PostWorker.perform_async("dataset disappeared. #{dataset}" ,["#joyent"])
+    # print old cookbook
+    worker.find_gone_cookbooks.each do |cookbook|
+      ## Skip twiter gone cookbook
+      # PostWorker.perform_async("cookbook disappeared. #{cookbook}" ,["#getchef"])
     end
 
-    # print new dataset
-    worker.find_new_datasets.each do |dataset|
-      PostWorker.perform_async("New dataset appeared. #{dataset}" ,["#joyent"])
+    # print new cookbook
+    worker.find_new_cookbooks.each do |cookbook|
+      PostWorker.perform_async("Cookbook #{data[0]} version #{data[1]} has been uploaded. #{GETCHEF_URL}#{data[0]}" ,["#getgetchef"])
     end
 
     worker.save_current_sets
   end
 end
 
-
+def split_cookbook(cookbook)
+  cookbook.split(':')
+end

@@ -4,10 +4,10 @@ source "https://rubygems.org"
 gem "twitter"
 gem "sidekiq"
 
-# group :sidekiq_web do
-#   gem 'sinatra'
-#   gem 'slim'
-# end
+group :development do
+  gem 'pry'
+  gem 'pry-doc'
+end
 
 
 

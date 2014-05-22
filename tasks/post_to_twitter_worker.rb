@@ -2,12 +2,12 @@ require 'twitter'
 require 'sidekiq'
 
 Sidekiq.configure_server do |config|
-  config.redis = { :namespace => 'jstalker'}
+  config.redis = { :namespace => 'getgetchef'}
   config.poll_interval = 10
 end
 
 Sidekiq.configure_client do |config|
-    config.redis = { :namespace => 'jstalker'}
+    config.redis = { :namespace => 'getgetchef'}
 end
 
 Twitter.configure do |config|
@@ -19,7 +19,7 @@ end
 
 class PostWorker
   include Sidekiq::Worker
-  
+
   sidekiq_options :retry => 5
 
   def perform(msg, hashtags = [])
@@ -32,7 +32,7 @@ end
 
 class DummyWorker
   include Sidekiq::Worker
-  
+
   sidekiq_options :retry => 5
 
   def perform(msg, hashtags = [])

@@ -7,6 +7,7 @@ GEM
     celluloid (0.12.4)
       facter (>= 1.6.12)
       timers (>= 1.0.0)
+    coderay (1.1.0)
     connection_pool (1.0.0)
     cucumber (1.2.1)
       builder (>= 2.1.2)
@@ -20,8 +21,16 @@ GEM
     gherkin (2.11.5)
       json (>= 1.4.6)
     json (1.7.6)
+    method_source (0.8.2)
     multi_json (1.5.0)
     multipart-post (1.1.5)
+    pry (0.9.12.6)
+      coderay (~> 1.0)
+      method_source (~> 0.8)
+      slop (~> 3.4)
+    pry-doc (0.6.0)
+      pry (~> 0.9)
+      yard (~> 0.8)
     redis (3.0.2)
     redis-namespace (1.2.1)
       redis (~> 3.0.0)
@@ -42,12 +51,14 @@ GEM
       redis (~> 3)
       redis-namespace
     simple_oauth (0.2.0)
+    slop (3.5.0)
     timers (1.1.0)
     twitter (4.5.0)
       faraday (~> 0.8, < 0.10)
       multi_json (~> 1.0)
       simple_oauth (~> 0.2)
     watchr (0.7)
+    yard (0.8.7.4)
 
 PLATFORMS
   ruby
@@ -55,6 +66,8 @@ PLATFORMS
 DEPENDENCIES
   autowatchr
   cucumber
+  pry
+  pry-doc
   rspec
   sidekiq
   twitter
