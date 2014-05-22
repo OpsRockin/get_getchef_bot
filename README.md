@@ -11,7 +11,7 @@ The informations are published to [https://twitter.com/getgetchef](https://twitt
 
 ### Steps
 
-perform every 20 minutes following
+perform every 10 minutes following
 
 1. create a staging list from Berkshelf API.
 2. compare between the staging list and a current list.
