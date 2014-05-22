@@ -25,7 +25,12 @@ class PostWorker
   def perform(msg, hashtags = [])
     tags = hashtags.join(" ")
     ti = [msg, tags].join(" ")
-    Twitter.update(ti)
+    unless DEBUG
+      Twitter.update(ti)
+    else
+      puts "DEBUG ==============================================="
+      puts ti
+    end
   end
 end
 
