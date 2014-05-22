@@ -79,12 +79,14 @@ namespace :perform do
 
     # print old cookbook
     worker.find_gone_cookbooks.each do |cookbook|
+      data = split_cookbook(cookbook)
       ## Skip twiter gone cookbook
       # PostWorker.perform_async("cookbook disappeared. #{cookbook}" ,["#getchef"])
     end
 
     # print new cookbook
     worker.find_new_cookbooks.each do |cookbook|
+      data = split_cookbook(cookbook)
       PostWorker.perform_async("Cookbook #{data[0]} version #{data[1]} has been uploaded. #{GETCHEF_URL}#{data[0]}" ,["#getgetchef"])
     end
 
