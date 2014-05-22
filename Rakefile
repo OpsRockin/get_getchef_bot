@@ -87,7 +87,7 @@ namespace :perform do
     # print new cookbook
     worker.find_new_cookbooks.each do |cookbook|
       data = split_cookbook(cookbook)
-      PostWorker.perform_async("Cookbook #{data[0]} version #{data[1]} has been uploaded. #{GETCHEF_URL}#{data[0]}" ,["#getgetchef"])
+      # PostWorker.perform_async("Cookbook #{data[0]} version #{data[1]} has been uploaded. #{GETCHEF_URL}#{data[0]}" ,["#getgetchef"])
     end
 
     worker.save_current_sets
