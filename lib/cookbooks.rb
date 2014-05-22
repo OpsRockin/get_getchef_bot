@@ -80,11 +80,13 @@ class Getgetchef
     end
 
     def find_new_cookbooks
+      sleep 1
       puts @redis.sdiff :staging_sets, :current_sets if ::DEBUG
       @redis.sdiff :staging_sets, :current_sets
     end
 
     def find_gone_cookbooks
+      sleep 1
       puts @redis.sdiff :staging_sets, :current_sets if ::DEBUG
       @redis.sdiff :current_sets, :staging_sets
     end
