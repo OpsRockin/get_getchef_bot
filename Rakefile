@@ -2,7 +2,7 @@ require 'redis'
 require 'redis-namespace'
 require './lib/cookbooks'
 
-GETCHEF_URL='http://community.opscode.com/cookbooks/'
+GETCHEF_URL='https://supermarket.getchef.com/cookbooks/'
 
 task :default => [:test]
 
